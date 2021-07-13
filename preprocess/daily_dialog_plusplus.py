@@ -1,6 +1,6 @@
 import os
 import argparse
-import importlib
+import json
 
 ALL_RESPONSE_TYPES = [
     "positive_responses",
@@ -10,8 +10,19 @@ ALL_RESPONSE_TYPES = [
 
 CLASS_NAME_MAP = {
     "processor_daily_dialog_plusplus_mlr":
-    "daily_dialog_plus_plus_mlr_loss_processor"
+        "daily_dialog_plus_plus_mlr_loss_processor"
 }
+
+
+def load_raw_data(file_path: str):
+    """ 加载原始数据文本
+
+    :param file_path: 原始文本地址
+    """
+    with open(file_path, "r", encoding="utf-8") as file:
+        data = json.load(file)
+    return data
+
 
 def parse_opt():
     parser = argparse.ArgumentParser()
@@ -23,4 +34,5 @@ def parse_opt():
     return args
 
 
-
+if __name__ == "__main__":
+    data = load_raw_data("../")
