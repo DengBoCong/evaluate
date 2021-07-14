@@ -10,5 +10,5 @@ echo "开始执行原始数据 ${dataset} 的处理"
 
 
 if [ $dataset == "daily_dialog_plusplus" ]; then
-  echo "还是说"
+  python daily_dialog_plusplus.py
 fi

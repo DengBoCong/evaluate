@@ -1,27 +1,20 @@
-import os
 import argparse
 import json
-
-ALL_RESPONSE_TYPES = [
-    "positive_responses",
-    "adversarial_negative_responses",
-    "random_negative_responses"
-]
-
-CLASS_NAME_MAP = {
-    "processor_daily_dialog_plusplus_mlr":
-        "daily_dialog_plus_plus_mlr_loss_processor"
-}
 
 
 def load_raw_data(file_path: str):
     """ 加载原始数据文本
 
     :param file_path: 原始文本地址
+    :return dialog_data: 样本列表
     """
-    with open(file_path, "r", encoding="utf-8") as file:
-        data = json.load(file)
-    return data
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            dialog_data = json.load(file)
+    except json.JSONDecodeError:
+        with open(file_path, "r", encoding="utf-8") as file:
+            dialog_data = [json.loads(line) for line in file.readlines()]
+    return dialog_data
 
 
 def parse_opt():
@@ -35,4 +28,5 @@ def parse_opt():
 
 
 if __name__ == "__main__":
-    data = load_raw_data("../")
+    data = load_raw_data("../data/raw/dailydialog++/dev.json")
+    print(data[0]["context"])
