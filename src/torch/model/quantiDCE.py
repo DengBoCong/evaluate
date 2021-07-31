@@ -6,3 +6,4 @@ class BERTMetric(nn.Module):
     def __init__(self):
         self.tokenizer = AutoTokenizer.from_pretrained()
         print("s")
+        print("fds")
