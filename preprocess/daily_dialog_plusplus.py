@@ -1,5 +1,6 @@
-import argparse
 import json
+import argparse
+from transformers import AutoTokenizer, AutoModel
 
 
 def load_raw_data(file_path: str):
@@ -19,14 +20,22 @@ def load_raw_data(file_path: str):
 
 def parse_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset_src", "-ds", choices=["daily_dialog++"], type=str,
-                        default="daily_dialog++", help="Source raw dataset name")
-    parser.add_argument()
+    parser.add_argument("--model_name", "-mn", type=str, required=False,
+                        default="bert-base-uncased", help="transformers model name")
+    parser.add_argument("--return_tensors", "-rt", type=str, required=False, default="pt", help="cal framework")
+    parser.add_argument("--max_length", "-ml", type=int, required=False, default=512, help="sentence max length")
 
     args = parser.parse_args()
     return args
 
 
 if __name__ == "__main__":
-    data = load_raw_data("../data/raw/dailydialog++/dev.json")
-    print(data[0]["context"])
+    args = parse_opt()
+    raw_data = load_raw_data("../data/raw/dailydialog++/dev.json")
+    # with open("../data/preprocess/preprocess_data.txt")
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name)
+    pt_model = AutoModel.from_pretrained(args.model_name)
+    inputs = tokenizer("Hello World! [SEP]", return_tensors="pt", padding=True, truncation=True, max_length=args.max_length)
+    outputs = pt_model(**inputs)
+    print(outputs.last_hidden_state.size())
+    # print(inputs["input_ids"].numpy().tolist())
